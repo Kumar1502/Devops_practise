@@ -22,3 +22,32 @@ public_subnets = [{
     subnet_cidr = "192.168.1.0/24"
     az          = "ap-south-1b"
 }]
+
+security_group_info = {
+  name        = "web"
+  vpc_id      = ""
+  description = "rule for web server"
+  inbound_rules = [{
+    cidr        = "0.0.0.0/0"
+    port        = 22
+    protocol    = "tcp"
+    description = "open ssh"
+
+    }, {
+    cidr        = "0.0.0.0/0"
+    port        = 80
+    protocol    = "tcp"
+    description = "open http"
+
+  }]
+  outbound_rules   = []
+  allow_all_egress = true
+}
+web_instance_info = {
+  ami               = "ami-05e00961530ae1b55"
+  security_group_id = ""
+  subnet_id         = ""
+  size              = "t2.micro"
+  key_name          = "newkeypair"
+  name              = "web"
+}
