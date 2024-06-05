@@ -1,0 +1,9 @@
+FROM nginx:1.27
+RUN cd /temp
+ARG URL=""
+RUN curl -O ${URL}
+RUN apt update
+RUN apt install unzip -y
+RUN cd /temp
+RUN unzip rent4u.zip
+RUN mv rent4u-html /var
