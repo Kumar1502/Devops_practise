@@ -1,0 +1,28 @@
+---
+name: nopcommerce
+services:
+  nop:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    expose:
+      - "5000"
+    ports:
+      - "5000"
+    networks:
+      - nop-net
+  nopdb:
+    image: mysql:8.0-debian
+    environment:
+      - MYSQL_ROOT_PASSWORD=admin
+      - MYSQL_DATABASE=nop
+      - MYSQL_USER=ltnop
+      - MYSQL_PASSWORD=admin
+    volumes:
+      - nop-vol:/var/lib/mysql:rw
+    networks:
+      - nop-net
+networks:
+  nop-net:
+volumes:
+  nop-vol:

@@ -1,0 +1,15 @@
+#git clone https://github.com/vpk99/nopCommerce-docker.git
+FROM mcr.microsoft.com/dotnet/sdk:8.0 As build
+ADD nopCommerce-docker/ /nopcommerce
+RUN mkdir /nopcommerce/published
+RUN cd /nopcommerce && \
+	dotnet publish -c Release -o /nopcommerce/published /nopcommerce/src/Presentation/Nop.Web/Nop.Web.csproj
+RUN mkdir /nopcommerce/published/bin /nopcommerce/published/logs
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+USER nobody
+COPY --from=build --chown=nobody /nopcommerce/published /nop
+WORKDIR /nop
+EXPOSE 5000
+CMD ["dotnet", "Nop.Web.dll", "--urls", "http://0.0.0.0:5000"]
+ 
