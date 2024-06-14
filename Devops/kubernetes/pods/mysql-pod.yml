@@ -1,0 +1,24 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: exercise1
+  labels:
+    app: mysql
+    env: dev
+    purpose: test
+spec:
+  containers:
+    - name: mysql-demo
+      image: mysql:8.0.37-debian
+      env:
+        - name: "MYSQL_DATABASE"
+          value: nop
+        - name: "MYSQL_USER"
+          value: nop
+        - name: "MYSQL_PASSWORD"
+          value: admin123
+        - name: "MYSQL_ROOT_PASSWORD"
+          value: nop
+      ports:
+        - containerPort: 3306
