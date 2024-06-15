@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: spc
-          image: springcommunity/spring-framework-petclinic
+          image: longflew/ram:3.0 #springcommunity/spring-framework-petclinic
           ports:
             - containerPort: 8080
           resources:
