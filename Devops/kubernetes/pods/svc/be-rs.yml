@@ -42,5 +42,5 @@ spec:
             initialDelaySeconds: 5
             periodSeconds: 10
             httpGet:
-              path: /test
+              path: / #test
               port: 80
