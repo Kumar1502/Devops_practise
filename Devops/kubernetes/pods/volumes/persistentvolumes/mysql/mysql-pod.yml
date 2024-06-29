@@ -18,10 +18,10 @@ spec:
           value: ltdevops
         - name: MYSQL_PASSWORD
           value: admin123
-      resources:
-        limits:
-          memory: 512Mi
-          cpu: 1000m
+      # resources:
+      #   limits:
+      #     memory: 1024Mi
+      #     cpu: 1000m
       volumeMounts:
         - name: nop-vol
           mountPath: /var/lib/mysql

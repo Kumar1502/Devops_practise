@@ -1,0 +1,5 @@
+FROM nginx
+ADD  /tmp/preschool.zip
+RUN apt update && apt install unzip && cd /tmp && unzip preschool.zip
+RUN mv /tmp/preschool-website-template /usr/share/nginx/html/preschool
+EXPOSE 80
