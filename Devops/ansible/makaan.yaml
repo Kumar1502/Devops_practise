@@ -1,0 +1,27 @@
+---
+- name: Deploy makaan into nginx
+  become: yes 
+  hosts: all 
+  tasks:
+    - name: update and install nginx
+      ansible.builtin.apt:
+        name:
+          - nginx
+          - unzip
+        update_cache: yes
+        state: present 
+    - name: download website template 
+      ansible.builtin.get_url:
+        url: https://www.free-css.com/assets/files/free-css-templates/download/page295/makaan.zip
+        dest: /tmp/makaan.zip 
+    - name: unzip the website
+      ansible.builtin.unarchive:
+        src: /tmp/makaan.zip
+        dest: /var/www/html
+        remote_src: yes
+    - name: rename the directory
+      ansible.builtin.command: mv /var/www/html/real-estate-html-template /var/www/html/makaan
+    - name: restart nginx
+      ansible.builtin.systemd:
+        state: restarted
+        name: nginx
