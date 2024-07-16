@@ -1,0 +1,68 @@
+--- 
+- name: install nopCommerce project on ubuntu
+  hosts: all 
+  become: yes
+  vars:
+    dotnet_version: dotnet-sdk-8.0
+  tasks:
+    - name: update packages and install unzip
+      ansible.builtin.apt:
+        name: unzip
+        update_cache: yes
+        state: present
+    - name: Install dotnet
+      ansible.builtin.apt:
+        name: "{{ dotnet_version }}"
+        state: present
+    - name: install nginx 
+      ansible.builtin.apt: 
+        name: nginx
+        state: present
+    - name: update ASP.NET configuration
+      ansible.builtin.copy:
+        src: default
+        dest: /etc/nginx/sites-available/default
+        remote_src: no
+    - name: Create nopCommerce Directory
+      ansible.builtin.file:
+        path: /var/www/nopCommerce
+        state: Directory
+        mode: '0755'
+    - name: navigate to the nopCommerce folder
+      ansible.builtin.command: cd /var/www/nopCommerce
+    - name: go to the nopCommerce folder
+      ansible.builtin.command:
+        chdir: cd /var/www/nopCommerce
+    - name: Install nopCommerce 
+      ansible.builtin.unarchive:
+        src: wget https://github.com/nopSolutions/nopCommerce/releases/download/release-4.70.4/nopCommerce_4.70.4_NoSource_linux_x64.zip
+        dest: /var/www/nopCommerce
+        remote_src: yes
+    - name: Create bin and logs Directory
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: Directory
+        mode: '0755'
+      loop:
+        - {path: bin}
+        - {path: logs}
+    - name: navigate to the parent folder
+      ansible.builtin.command: cd ..
+    - name: Change file ownership, group and permissions
+      ansible.builtin.file:
+        path: nopCommerce/
+        owner: www-data
+        group: www-data
+    - name: update nopCommerce service file
+      ansible.builtin.copy:
+        src: nopCommerce.service
+        dest: /etc/systemd/system/nopCommerce.service
+    - name: Start nopCommerce service
+      ansible.builtin.systemd_service:
+        name: nopCommerce.service
+        enabled: true 
+        state: started
+    - name: Restart nginx service
+      ansible.builtin.systemd_service:
+        name: nginx
+        state: restarted

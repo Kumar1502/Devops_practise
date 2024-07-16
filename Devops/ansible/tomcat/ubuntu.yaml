@@ -1,0 +1,34 @@
+--- 
+- name: tomcat installation on ubuntu 22.04
+  hosts: all 
+  become: yes
+  vars:
+    java_home: openjdk-11-jdk
+    user_name: tomcat
+    group_name: tomcat
+    home_dir: /opt/tomcat
+    default_shell: /bin/false
+    tomcat_version: "10.1.25"
+  tasks:
+    - name: update packages and install java
+      ansible.builtin.apt:
+        - name: "{{ java_home }}"
+          update_cache: yes
+          state: present 
+    - name: create a group tomcat
+      ansible.builtin.user:
+        - name: "{{ group_name }}"
+          state: present
+    - name: create a system user tomcat
+      ansible.builtin.user:
+        - name: "{{ user_name }}"
+          create_home: yes
+          home: "{{ home_dir }}"
+          shell : "{{ default_shell }}"
+          state: present
+    - name: download and extract tomcat
+      ansible.builtin.unarchieve:
+        - src: https://www-eu.apache.org/dist/tomcat/tomcat-10/v{{ tomcat_version }}/bin/apache-tomcat-{{ tomcat_version }}.tar.gz
+          dest: "{{ home_dir }}"
+          remote_src: yes
+    - name: 

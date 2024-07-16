@@ -1,0 +1,20 @@
+---
+- name: install php on apache servevr
+  become: yes
+  hosts: all
+  tasks:
+    - name: install apache2 
+      ansible.builtin.apt:
+        name: apache2
+        update_cache: yes
+        state: present
+    - name: install php modules
+      ansible.builtin.apt:
+        name: 
+          - php
+          - php-fpm
+        state: present
+    - name: copy php info 
+      copy: 
+        content: <?php phpinfo();?>
+        dest: /var/www/html/info.php
