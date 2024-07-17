@@ -4,6 +4,8 @@
   become: yes
   vars:
     dotnet_version: dotnet-sdk-8.0
+    nopCommerce_url: "https://github.com/nopSolutions/nopCommerce/releases/download/release-4.70.4/nopCommerce_4.70.4_NoSource_linux_x64.zip"
+    nop_home_dir: /var/www/nopCommerce
   tasks:
     - name: update packages and install unzip
       ansible.builtin.apt:
@@ -25,14 +27,14 @@
         remote_src: no
     - name: Create nopCommerce Directory
       ansible.builtin.file:
-        path: /var/www/nopCommerce
+        path: "{{ nop_home_dir }}"
         state: directory
     - name: Navigate go to the nopCommerce folder
       shell: cd /var/www/nopCommerce
     - name: Install nopCommerce 
       ansible.builtin.unarchive:
-        src: "https://github.com/nopSolutions/nopCommerce/releases/download/release-4.70.4/nopCommerce_4.70.4_NoSource_linux_x64.zip"
-        dest: /var/www/nopCommerce
+        src: "{{ nopCommerce_url }}"
+        dest: "{{ nop_home_dir }}"
         remote_src: yes
     - name: Create bin and logs Directory
       ansible.builtin.file:
@@ -42,14 +44,9 @@
       loop:
         - {path: /var/www/nopCommerce/bin}
         - {path: /var/www/nopCommerce/logs}
-    - name: Change group ownership permissions
-      ansible.builtin.shell:
-        cmd: "chgrp -R www-data /var/www/nopCommerce/"
-        executable: "/bin/bash"
-    - name: Change  ownership permissions
-      ansible.builtin.shell:
-        cmd: "chown -R www-data /var/www/nopCommerce/"
-        executable: "/bin/bash"
+      notify:
+        - change group permissions
+        - change ownership permissions
     - name: update nopCommerce service file
       ansible.builtin.copy:
         src: nopCommerce.service
@@ -59,7 +56,18 @@
         name: nopCommerce.service
         enabled: true 
         state: started
-    - name: Restart nginx service
+      notify:
+        - restart nginx
+  handlers:
+    - name: restart nginx 
       ansible.builtin.systemd_service:
         name: nginx
         state: restarted
+    - name: change group permissions
+      ansible.builtin.shell:
+        cmd: "chgrp -R www-data {{ nop_home_dir }}"
+        executable: "/bin/bash"
+    - name: change ownership permissions
+      ansible.builtin.shell:
+        cmd: "chown -R www-data {{ nop_home_dir }}"
+        executable: "/bin/bash"
