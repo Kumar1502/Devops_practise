@@ -42,8 +42,8 @@
         state: directory
         mode: '0755'
       loop:
-        - {path: bin}
-        - {path: logs}
+        - {path: /var/www/nopCommerce/bin}
+        - {path: /var/www/nopCommerce/logs}
     - name: navigate to the parent folder
       shell: cd ..
     - name: Change file ownership, group and permissions
