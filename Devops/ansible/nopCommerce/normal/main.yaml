@@ -45,7 +45,8 @@
         - {path: bin}
         - {path: logs}
     - name: navigate to the parent folder
-      ansible.builtin.command: cd ..
+      ansible.builtin.shell: 
+        cmd: cd ..
     - name: Change file ownership, group and permissions
       ansible.builtin.file:
         path: nopCommerce/
