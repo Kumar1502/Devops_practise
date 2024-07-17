@@ -27,9 +27,7 @@
       ansible.builtin.file:
         path: /var/www/nopCommerce
         state: directory
-        #mode: '0755'
     - name: Navigate go to the nopCommerce folder
-      #ansible.builtin.command:
       shell: cd /var/www/nopCommerce
     - name: Install nopCommerce 
       ansible.builtin.unarchive:
@@ -44,8 +42,6 @@
       loop:
         - {path: /var/www/nopCommerce/bin}
         - {path: /var/www/nopCommerce/logs}
-    # - name: navigate to the parent folder
-    #   shell: cd /var/www
     - name: Change group ownership permissions
       ansible.builtin.shell:
         cmd: "chgrp -R www-data /var/www/nopCommerce/"
