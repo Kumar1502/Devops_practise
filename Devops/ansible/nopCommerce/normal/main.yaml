@@ -4,7 +4,7 @@
   become: yes
   tasks:
     - name: check if this plyabook is executed on supported distribution 
-      ansible.nuiltin.fail:
+      ansible.builtin.fail:
        msg: "This playbook is designed to run only on ubuntu"
       when: ansible_facts['distribution']!='Ubuntu'
     - name: Update package and install unzip, dotnet and nginx
