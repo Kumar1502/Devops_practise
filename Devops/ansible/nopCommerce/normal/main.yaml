@@ -38,7 +38,7 @@
       ansible.builtin.file:
         path: "{{ item.path }}"
         state: directory
-        mode: '0755'
+       # mode: '0755'
       loop:
         - {path: /var/www/nopCommerce/bin}
         - {path: /var/www/nopCommerce/logs}
