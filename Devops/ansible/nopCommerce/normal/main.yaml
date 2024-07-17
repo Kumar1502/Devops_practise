@@ -1,10 +1,7 @@
 --- 
 - name: install nopCommerce project on ubuntu
-  hosts: all
+  hosts: ubuntu
   become: yes
-  vars:
-    nopCommerce_url: "https://github.com/nopSolutions/nopCommerce/releases/download/release-4.70.4/nopCommerce_4.70.4_NoSource_linux_x64.zip"
-    nop_home_dir: /var/www/nopCommerce
   tasks:
     - name: Install unzip, dotnet and nginx
       ansible.builtin.apt:
