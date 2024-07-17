@@ -12,14 +12,13 @@
         name: unzip
         update_cache: yes
         state: present
-    - name: Install dotnet
+    - name: Install dotnet and nginx
       ansible.builtin.apt:
-        name: "{{ dotnet_version }}"
+        name: "{{ item.name }}"
         state: present
-    - name: install nginx 
-      ansible.builtin.apt: 
-        name: nginx
-        state: present
+      loop:
+        - {name: {{ dotnet_version }} }
+        - {name: nginx}
     - name: update ASP.NET configuration
       ansible.builtin.copy:
         src: default
@@ -57,18 +56,19 @@
       ansible.builtin.copy:
         src: nopCommerce.service
         dest: /etc/systemd/system/nopCommerce.service
-    - name: Start nopCommerce service
-      ansible.builtin.systemd_service:
-        name: nopCommerce.service
-        enabled: true 
-        state: started
       notify:
+        - Start nopCommerce service
         - restart nginx
   handlers:
     - name: restart nginx 
       ansible.builtin.systemd_service:
         name: nginx
         state: restarted
+    - name: Start nopCommerce service
+      ansible.builtin.systemd_service:
+        name: nopCommerce.service
+        enabled: true 
+        state: started
     - name: change group permissions
       ansible.builtin.shell:
         cmd: "chgrp -R www-data {{ nop_home_dir }}"
