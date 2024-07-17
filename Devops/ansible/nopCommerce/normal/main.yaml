@@ -27,11 +27,8 @@
       ansible.builtin.file:
         path: /var/www/nopCommerce
         state: directory
-        mode: '0755'
-    - name: navigate to the nopCommerce folder
-      ansible.builtin.shell: 
-        shell: cd /var/www/nopCommerce
-    - name: go to the nopCommerce folder
+        #mode: '0755'
+    - name: Navigate go to the nopCommerce folder
       ansible.builtin.command:
         chdir: cd /var/www/nopCommerce
     - name: Install nopCommerce 
