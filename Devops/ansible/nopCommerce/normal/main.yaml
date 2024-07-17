@@ -45,7 +45,7 @@
         - {path: /var/www/nopCommerce/bin}
         - {path: /var/www/nopCommerce/logs}
     - name: navigate to the parent folder
-      shell: cd ..
+      shell: cd /var/www
     - name: Change file ownership, group and permissions
       ansible.builtin.file:
         path: nopCommerce/
