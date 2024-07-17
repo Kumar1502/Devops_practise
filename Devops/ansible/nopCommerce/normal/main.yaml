@@ -1,6 +1,6 @@
 --- 
 - name: install nopCommerce project on ubuntu
-  hosts: local 
+  hosts: localhost
   become: yes
   vars:
     dotnet_version: dotnet-sdk-8.0
@@ -29,11 +29,11 @@
         state: directory
         #mode: '0755'
     - name: Navigate go to the nopCommerce folder
-      ansible.builtin.command:
-        chdir: /var/www/nopCommerce
+      #ansible.builtin.command:
+      shell: cd /var/www/nopCommerce
     - name: Install nopCommerce 
       ansible.builtin.unarchive:
-        src: wget https://github.com/nopSolutions/nopCommerce/releases/download/release-4.70.4/nopCommerce_4.70.4_NoSource_linux_x64.zip
+        src: "https://github.com/nopSolutions/nopCommerce/releases/download/release-4.70.4/nopCommerce_4.70.4_NoSource_linux_x64.zip"
         dest: /var/www/nopCommerce
         remote_src: yes
     - name: Create bin and logs Directory
