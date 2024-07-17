@@ -29,7 +29,9 @@
         state: directory
         mode: '0755'
     - name: navigate to the nopCommerce folder
-      ansible.builtin.command: cd /var/www/nopCommerce
+      ansible.builtin.shell: 
+        cmd: cd /var/www/nopCommerce
+        executable: "bin/bash"
     - name: go to the nopCommerce folder
       ansible.builtin.command:
         chdir: cd /var/www/nopCommerce
