@@ -39,7 +39,7 @@
     - name: Create bin and logs Directory
       ansible.builtin.file:
         path: "{{ item.path }}"
-        state: Directory
+        state: directory
         mode: '0755'
       loop:
         - {path: bin}
