@@ -43,8 +43,7 @@
         - {path: "{{ nop_home_dir }}/bin"}
         - {path: "{{ nop_home_dir }}/logs"}
       notify:
-        - change group permissions
-        - change ownership permissions
+        - change ownership of the directory
     - name: create nopCommerce service file
       ansible.builtin.template:
         src: nopCommerce.service.j2
