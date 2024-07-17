@@ -1,6 +1,6 @@
 --- 
 - name: install nopCommerce project on ubuntu
-  hosts: all 
+  hosts: local 
   become: yes
   vars:
     dotnet_version: dotnet-sdk-8.0
@@ -26,7 +26,7 @@
     - name: Create nopCommerce Directory
       ansible.builtin.file:
         path: /var/www/nopCommerce
-        state: Directory
+        state: directory
         mode: '0755'
     - name: navigate to the nopCommerce folder
       ansible.builtin.command: cd /var/www/nopCommerce
