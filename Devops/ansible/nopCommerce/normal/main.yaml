@@ -25,7 +25,7 @@
       ansible.builtin.file:
         path: "{{ nop_home_dir }}"
         state: directory
-    - name: find stats of nopCommerce folder
+    - name: find stats of nopCommerce appdata folder
       ansible.builtin.stat:
         path: "{{ nop_home_dir }}/App_Data"
       register: nopCommerce_appdata_folder_stats
