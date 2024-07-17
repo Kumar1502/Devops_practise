@@ -53,7 +53,7 @@
         name: nopCommerce.service
         enabled: yes 
         state: started
-        notify:
+      notify:
         - restart nginx
   handlers:
     - name: restart nginx 
