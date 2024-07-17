@@ -45,8 +45,8 @@
       notify:
         - change ownership of the directory
     - name: create nopCommerce service file
-      ansible.builtin.template:
-        src: nopCommerce.service.j2
+      ansible.builtin.copy:
+        src: nopCommerce.service
         dest: /etc/systemd/system/nopCommerce.service
       notify:
         - Start nopCommerce service
