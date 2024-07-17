@@ -44,9 +44,8 @@
       loop:
         - {path: bin}
         - {path: logs}
-    # - name: navigate to the parent folder
-    #   ansible.builtin.shell: 
-    #     cmd: cd ..
+    - name: navigate to the parent folder
+      shell: cd ..
     - name: Change file ownership, group and permissions
       ansible.builtin.file:
         path: nopCommerce/
