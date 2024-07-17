@@ -49,18 +49,18 @@
         src: nopCommerce.service
         dest: /etc/systemd/system/nopCommerce.service
       notify:
-        - Start nopCommerce service
+        - start nopCommerce service
         - restart nginx
   handlers:
-    - name: restart nginx 
-      ansible.builtin.systemd_service:
-        name: nginx
-        state: restarted
-    - name: Start nopCommerce service
+    - name: start nopCommerce service
       ansible.builtin.systemd_service:
         name: nopCommerce.service
         enabled: true 
         state: started
+    - name: restart nginx 
+      ansible.builtin.systemd_service:
+        name: nginx
+        state: restarted
     - name: change ownership of the directory
       ansible.builtin.file:
         path: "{{ nop_home_dir }}"
