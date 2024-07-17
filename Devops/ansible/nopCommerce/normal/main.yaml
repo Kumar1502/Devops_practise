@@ -3,21 +3,22 @@
   hosts: localhost
   become: yes
   vars:
-    dotnet_version: dotnet-sdk-8.0
     nopCommerce_url: "https://github.com/nopSolutions/nopCommerce/releases/download/release-4.70.4/nopCommerce_4.70.4_NoSource_linux_x64.zip"
     nop_home_dir: /var/www/nopCommerce
   tasks:
-    - name: update packages and install unzip
-      ansible.builtin.apt:
-        name: unzip
-        update_cache: yes
-        state: present
-    - name: Install dotnet and nginx
+    # - name: update packages and install unzip
+    #   ansible.builtin.apt:
+    #     name: unzip
+    #     update_cache: yes
+    #     state: present
+    - name: Install unzip, dotnet and nginx
       ansible.builtin.apt:
         name: "{{ item.name }}"
+        update_cache: yes
         state: present
       loop:
-        - name: {{ dotnet_version }} 
+        - {name: unzip }
+        - {name: dotnet-sdk-8.0 }
         - {name: nginx}
     - name: update ASP.NET configuration
       ansible.builtin.copy:
