@@ -3,7 +3,11 @@
   hosts: ubuntu
   become: yes
   tasks:
-    - name: Install unzip, dotnet and nginx
+    - name: check if this plyabook is executed on supported distribution 
+      ansible.nuiltin.fail:
+        msg: "This playbook is designed to run only on ubuntu"
+      when: ansible_facts['distribution']!='Ubuntu'
+    - name: Update package and install unzip, dotnet and nginx
       ansible.builtin.apt:
         name: "{{ item.name }}"
         update_cache: yes
@@ -61,11 +65,14 @@
         name: nopCommerce.service
         enabled: true 
         state: started
-    - name: change group permissions
-      ansible.builtin.shell:
-        cmd: "chgrp -R www-data {{ nop_home_dir }}"
-        executable: "/bin/bash"
-    - name: change ownership permissions
-      ansible.builtin.shell:
-        cmd: "chown -R www-data {{ nop_home_dir }}"
-        executable: "/bin/bash"
+    - name: change ownership of the directory
+      ansible.builtin.file:
+        path: "{{ nop_home_dir }}"
+        state: directory
+        recurse: yes
+        owner: "{{ user_name }}"
+        group: "{{ group_name }}"
+    # - name: change ownership permissions
+    #   ansible.builtin.shell:
+    #     cmd: "chown -R www-data {{ nop_home_dir }}"
+    #     executable: "/bin/bash"
