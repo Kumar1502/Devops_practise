@@ -51,13 +51,13 @@
     - name: start nopCommerce service
       ansible.builtin.systemd:
         name: nopCommerce.service
-        enabled: true 
+        enabled: yes 
         state: started
         notify:
         - restart nginx
   handlers:
     - name: restart nginx 
-      ansible.builtin.systemd_service:
+      ansible.builtin.systemd:
         name: nginx
         state: restarted
     - name: change ownership of the directory
