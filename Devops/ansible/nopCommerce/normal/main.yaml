@@ -48,10 +48,12 @@
     #   shell: cd /var/www
     - name: Change group ownership permissions
       ansible.builtin.shell:
-        cmd: "chgrp -R www-data nopCommerce/"
+        cmd: "chgrp -R www-data /var/www/nopCommerce/"
+        executable: "/bin/bash"
     - name: Change  ownership permissions
       ansible.builtin.shell:
-        cmd: "chown -R www-data nopCommerce/"
+        cmd: "chown -R www-data /var/www/nopCommerce/"
+        executable: "/bin/bash"
     - name: update nopCommerce service file
       ansible.builtin.copy:
         src: nopCommerce.service
