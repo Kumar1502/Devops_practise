@@ -29,15 +29,13 @@
       ansible.builtin.file:
         path: "{{ nop_home_dir }}"
         state: directory
-    # - name: Navigate go to the nopCommerce folder
-    #   shell: cd "{{ nop_home_dir }}"
     - name: find stats of nopCommerce folder
       ansible.builtin.stat:
         path: "{{ nop_home_dir }}/App_Data"
       register: nopCommerce_appdata_folder_stats
-    - name: print stats
-      debug:
-        var: nopCommerce_appdata_folder_stats.stat.exists
+    # - name: print stats
+    #   debug:
+    #     var: nopCommerce_appdata_folder_stats.stat.exists
     - name: Install nopCommerce website
       ansible.builtin.unarchive:
         src: "{{ nopCommerce_url }}"
