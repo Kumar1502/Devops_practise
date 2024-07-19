@@ -1,0 +1,53 @@
+---
+- name: check if this plyabook is executed on supported distribution 
+  ansible.builtin.fail:
+    msg: "This playbook is designed to run only on ubuntu"
+  when: ansible_facts['distribution']!='Ubuntu'
+- name: Update package and install unzip, dotnet and nginx
+  ansible.builtin.apt:
+    name: "{{ item.name }}"
+    update_cache: yes
+    state: present
+  loop:
+    - {name: unzip }
+    - {name: "{{ dotnet_version }}" }
+    - {name: nginx}
+- name: update ASP.NET configuration
+  ansible.builtin.copy:
+    src: default
+    dest: /etc/nginx/sites-available/default
+    remote_src: no
+- name: Create nopCommerce Directory
+  ansible.builtin.file:
+    path: "{{ nop_home_dir }}"
+    state: directory
+- name: find stats of nopCommerce appdata folder
+  ansible.builtin.stat:
+    path: "{{ nop_home_dir }}/App_Data"
+  register: nopCommerce_appdata_folder_stats
+- name: Install nopCommerce website
+  ansible.builtin.unarchive:
+    src: "{{ nopCommerce_url }}"
+    dest: "{{ nop_home_dir }}"
+    remote_src: yes
+  when: nopCommerce_appdata_folder_stats.stat.exists == false
+- name: Create bin and logs Directory
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: directory
+  loop:
+    - {path: "{{ nop_home_dir }}/bin"}
+    - {path: "{{ nop_home_dir }}/logs"}
+  notify:
+    - change ownership of the directory
+- name: create nopCommerce service file
+  ansible.builtin.template:
+    src: nopCommerce.service.j2
+    dest: /etc/systemd/system/nopCommerce.service
+- name: start nopCommerce service
+  ansible.builtin.systemd:
+    name: nopCommerce.service
+    enabled: yes 
+    state: started
+  notify:
+    - restart nginx

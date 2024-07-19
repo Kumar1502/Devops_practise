@@ -1,2 +1,14 @@
 ---
 # handlers file for skeleton
+  - name: restart nginx 
+    ansible.builtin.systemd:
+      name: nginx
+      state: restarted
+  - name: change ownership of the directory
+    ansible.builtin.file:
+      path: "{{ nop_home_dir }}"
+      state: directory
+      recurse: yes
+      owner: "{{ user_name }}"
+      group: "{{ group_name }}"
+ 

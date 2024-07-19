@@ -1,0 +1,6 @@
+--- 
+- name: install nopCommerce application
+  hosts: appservevrs
+  roles:  
+    - role: nopCommerce
+      become: yes
