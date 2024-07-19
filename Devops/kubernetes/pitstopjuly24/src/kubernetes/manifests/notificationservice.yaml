@@ -1,0 +1,38 @@
+--- 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notificationservice
+spec:
+  minReadySeconds: 3
+  replicas: 1
+  selector:
+    matchLabels:
+      name: notificationservice
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      labels:
+        name: notificationservice 
+        version: v1.0
+    spec:
+      containers:
+        - name: notification
+          image: kumar1502/notificationservice:1.0
+          env:
+            - name: DOTNET_ENVIRONMENT
+              value: Production
+          # ports:
+          #   - containerPort: 5000
+          #     name: notificationservice
+          #     protocol: TCP
+        #  resources:
+        #     limits:
+        #       cpu: 250m
+        #       memory: 256Mi 
+      restartPolicy: Always
+

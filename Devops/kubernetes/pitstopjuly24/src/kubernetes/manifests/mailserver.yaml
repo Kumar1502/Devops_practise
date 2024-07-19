@@ -1,0 +1,54 @@
+--- 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mailserver-deploy
+spec:
+  minReadySeconds: 3
+  replicas: 1
+  selector:
+    matchLabels:
+      name: mailserver
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      labels: 
+        name: mailserver
+        version: v1.0
+    spec:
+      containers:
+        - name: mailserver
+          image: maildev/maildev:1.1.0
+          ports:
+            - containerPort: 25
+              name: mailserver-1
+              protocol: TCP
+            - containerPort: 80
+              name: mailserver-2
+              protocol: TCP
+        #  resources:
+        #     limits:
+        #       cpu: 250m
+        #       memory: 256Mi 
+      restartPolicy: Always
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+  name: mailserver
+spec:
+  selector:
+    name: mailserver
+  ports:
+    - name: test1
+      port: 25
+      targetPort: 25
+      protocol: TCP
+    - name: test2
+      port: 4000
+      targetPort: 80
+      protocol: TCP

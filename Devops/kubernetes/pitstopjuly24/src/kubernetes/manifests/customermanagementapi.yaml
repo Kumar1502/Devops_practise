@@ -1,0 +1,50 @@
+--- 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customermanagementapi-deploy
+spec:
+  minReadySeconds: 3
+  replicas: 1
+  selector:
+    matchLabels:
+      name: customermanagementapi
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      labels: 
+        name: customermanagementapi
+        version: v1.0
+    spec:
+      containers:
+        - name: customermanagementapi
+          image: kumar1502/customermanagementapi:1.0
+          ports:
+            - containerPort: 5100
+              name: customer
+              protocol: TCP
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Production
+        #  resources:
+        #     limits:
+        #       cpu: 250m
+        #       memory: 256Mi 
+      restartPolicy: Always
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+  name: customermanagementapi
+spec:
+  selector:
+    name: customermanagementapi
+  ports:
+  - name: test
+    port: 5100
+    targetPort: 5100
+    protocol: TCP

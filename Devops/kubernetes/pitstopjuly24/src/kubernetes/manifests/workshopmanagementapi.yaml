@@ -1,0 +1,50 @@
+--- 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: workshopmanagementapi-deploy
+spec:
+  minReadySeconds: 3
+  replicas: 1
+  selector:
+    matchLabels:
+      name: workshopmanagementapi
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      labels:
+        name: workshopmanagementapi 
+        version: v1.0
+    spec:
+      containers:
+        - name: workshopmanagementapi
+          image: kumar1502/workshopmanagementapi:1.0
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Production
+          ports:
+            - containerPort: 5200
+              name: workshopapi
+              protocol: TCP
+        #  resources:
+        #     limits:
+        #       cpu: 250m
+        #       memory: 256Mi 
+      restartPolicy: Always
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+  name: workshopmanagementapi
+spec:
+  selector:
+    name: workshopmanagementapi
+  ports:
+  - name: test
+    port: 5200
+    targetPort: 5200
+    protocol: TCP

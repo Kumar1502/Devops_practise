@@ -1,0 +1,38 @@
+--- 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auditlogservice
+spec:
+  minReadySeconds: 3
+  replicas: 1
+  selector:
+    matchLabels:
+      name: auditlogservice
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      labels:
+        name: auditlogservice 
+        version: v1.0
+    spec:
+      containers:
+        - name: auditlogservice
+          image: kumar1502/auditlogservice:1.0
+          env:
+            - name: DOTNET_ENVIRONMENT
+              value: Production
+          # ports:
+          #   - containerPort: 5000
+          #     name: auditlogservice
+          #     protocol: TCP
+        #  resources:
+        #     limits:
+        #       cpu: 250m
+        #       memory: 256Mi 
+      restartPolicy: Always
+

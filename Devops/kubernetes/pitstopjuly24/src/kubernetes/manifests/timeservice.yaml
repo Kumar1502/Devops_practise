@@ -1,0 +1,33 @@
+--- 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: timeservice
+spec:
+  minReadySeconds: 3
+  replicas: 1
+  selector:
+    matchLabels:
+      name: timeservice
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      labels:
+        name: timeservice 
+        version: v1.0
+    spec:
+      containers:
+        - name: timeservice
+          image: kumar1502/timeservice:1.0
+          env:
+            - name: DOTNET_ENVIRONMENT
+              value: Production
+        #  resources:
+        #     limits:
+        #       cpu: 250m
+        #       memory: 256Mi 
+      restartPolicy: Always
