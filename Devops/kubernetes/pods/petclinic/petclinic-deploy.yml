@@ -1,0 +1,43 @@
+--- 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: petclinic-deploy
+spec:
+  minReadySeconds: 2
+  replicas: 1
+  selector:
+    matchLabels:
+      name: petclinic
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      labels: 
+        name: petclinic
+        version: v1.0
+    spec:
+      containers:
+        - name: petclinic
+          image: 
+          ports:
+            - containerPort: 8080
+              name: customer
+              protocol: TCP
+      restartPolicy: Always
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+  name: petclinic
+spec:
+  selector:
+    name: petclinic
+  ports:
+  - name: test
+    port: 8080
+    targetPort: 8080
+    protocol: TCP

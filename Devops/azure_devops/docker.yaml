@@ -1,0 +1,10 @@
+jobs:
+ - job: CI 
+   displayName: Dcoker image build
+   pool:
+    vmImage: ubuntu-22.04
+   steps:
+    - task: Docker@2
+      inputs:
+        command:
+        
